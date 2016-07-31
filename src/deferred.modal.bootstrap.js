@@ -20,67 +20,92 @@
              * the plugin will return the deferred instead of the collection.
              */
             returnDeferred: true
+        },
+        names = {
+            DATA_ATTR_PROMISE_DISPATCH: 'data-promise-dispatch',
+            DATA_KEY_PROMISE_DISPATCH: 'promiseDispatch',
+            DATA_KEY_DEFERRED: 'modalDeferred',
+            DATA_KEY_RETURN_DEFERRED: 'returnDeferred',
+            DATA_KEY_REJECT_ON_DISMISS: 'rejectOnDismiss',
+            VALUE_PENDING_DEFERRED_STATE: 'pending'
+        },
+        assignDeferred = function (dialog) {
+            var deferred = $.Deferred();
+
+            /*
+             * The modal exists to allow for interactions that will resolve or
+             * reject the deferred. Internal modification to the deferred's
+             * state will handle closing it. External modifications should
+             * result in the same as the interaction will no longer be needed.
+             */
+            deferred.always(function () {
+                dialog.modal('hide');
+            });
+
+            dialog.data(names.DATA_KEY_DEFERRED, deferred);
         };
 
-    $.fn.modalDeferred = function (options) {
-        var collection = this;
+    $.fn.modalDeferred = function (p) {
+        var collection = this,
+            options;
+
+        if (typeof p === 'string') {
+            collection.modal(p);
+        } else {
+            /*
+             * Combine the default options with the passed in overrides (if any) to
+             * produce options for this execution
+             */
+            options = $.extend(
+                {},
+                defaults,
+                (p || {})
+            );
+
+            collection.each(function () {
+                var dialog = $(this);
+
+                assignDeferred(dialog);
+
+                dialog
+                    .data(names.DATA_KEY_RETURN_DEFERRED, options.returnDeferred)
+                    .data(names.DATA_KEY_REJECT_ON_DISMISS, options.rejectOnDismiss)
+                    .on('show.bs.modal', function () {
+                        var deferred = dialog.data(names.DATA_KEY_DEFERRED);
+
+                        if (!deferred || deferred.state() !== names.VALUE_PENDING_DEFERRED_STATE) {
+                            assignDeferred(dialog);
+                        }
+                    })
+                    .on('hide.bs.modal', function () {
+                        var deferred = dialog.data(names.DATA_KEY_DEFERRED);
+
+                        if (deferred.state() === names.VALUE_PENDING_DEFERRED_STATE) {
+                            deferred[(dialog.data(names.DATA_KEY_REJECT_ON_DISMISS) ? 'reject' : 'resolve')]();
+                        }
+                    })
+                    .on('click', '[' + names.DATA_ATTR_PROMISE_DISPATCH + ']', function () {
+                        var is_resolve_action = ($(this).data(names.DATA_KEY_PROMISE_DISPATCH) === 'resolve');
+
+                        dialog.data(names.DATA_KEY_DEFERRED)[(is_resolve_action ? 'resolve' : 'reject')]();
+
+                        dialog.modal('hide');
+                    })
+                    .modal(options);
+            });
+        }
 
         /*
-         * Combine the default options with the passed in overrides (if any) to
-         * produce options for this execution
-         */
-        options = $.extend(
-            {},
-            defaults,
-            (options || {})
-        );
-
-        collection.each(function () {
-            var dialog = $(this);
-
-            dialog
-                .on('show.bs.modal', function () {
-                    var deferred = dialog.data('modalDeferred');
-
-                    if (!deferred || deferred.state() !== 'pending') {
-                        deferred = $.Deferred();
-
-                        /*
-                         * The modal exists to allow for interactions that will resolve or
-                         * reject the deferred. Internal modification to the deferred's
-                         * state will handle closing it. External modifications should
-                         * result in the same as the interaction will no longer be needed.
-                         */
-                        deferred.always(function () {
-                            dialog.modal('hide');
-                        });
-
-                        dialog.data('modalDeferred', deferred);
-                    }
-                })
-                .on('hidden.bs.modal', function () {
-                    var deferred = dialog.data('modalDeferred');
-
-                    if (deferred.state() === 'pending') {
-                        deferred[(options.rejectOnDismiss ? 'reject' : 'resolve')]();
-                    }
-                })
-                .on('click', '[data-promise]', function () {
-                    var is_resolve_action = ($(this).data('promise') === 'resolve');
-
-                    dialog.data('modalDeferred')[(is_resolve_action ? 'resolve' : 'reject')]();
-
-                    dialog.modal('hide');
-                })
-                .modal(options);
-        });
-
-        /*
-         * If the caller used the `returnDeferred` option to ask for the
-         * deferred instead of the colleciton, and the collection only had one
-         * element, then we'll return the deferred. Otherwise return the
+         * If the collection only had one element, and the caller used the
+         * `returnDeferred` option to ask for the deferred instead of the
+         * collection, then we'll return the deferred. Otherwise return the
          * collection like any other jQuery plugin would do.
          */
-        return (options.returnDeferred && collection.length === 1) ? collection.data('modalDeferred') : collection;
+        return (
+            collection.length === 1 &&
+            collection.data(names.DATA_KEY_RETURN_DEFERRED)
+        ) ?
+            collection.data(names.DATA_KEY_DEFERRED) :
+            collection;
     };
 }(this));
