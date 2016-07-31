@@ -23,8 +23,7 @@
         };
 
     $.fn.modalDeferred = function (options) {
-        var collection = this,
-        single_deferred;
+        var collection = this;
 
         /*
          * Combine the default options with the passed in overrides (if any) to
@@ -37,48 +36,51 @@
         );
 
         collection.each(function () {
-            var dialog = $(this),
-                deferred = $.Deferred(),
-                resolved;
-
-            /*
-             * Store the deferred on the element's data for later public access
-             */
-            dialog.data('deferred', deferred);
-
-            if (collection.length === 1) {
-                single_deferred = deferred;
-            }
-
-            resolved = !options.rejectOnDismiss;
+            var dialog = $(this);
 
             dialog
+                .on('show.bs.modal', function () {
+                    var deferred = dialog.data('modalDeferred');
+
+                    if (!deferred || deferred.state() !== 'pending') {
+                        deferred = $.Deferred();
+
+                        /*
+                         * The modal exists to allow for interactions that will resolve or
+                         * reject the deferred. Internal modification to the deferred's
+                         * state will handle closing it. External modifications should
+                         * result in the same as the interaction will no longer be needed.
+                         */
+                        deferred.always(function () {
+                            dialog.modal('hide');
+                        });
+
+                        dialog.data('modalDeferred', deferred);
+                    }
+                })
                 .on('hidden.bs.modal', function () {
-                    deferred[(resolved ? 'resolve' : 'reject')]();
+                    var deferred = dialog.data('modalDeferred');
+
+                    if (deferred.state() === 'pending') {
+                        deferred[(options.rejectOnDismiss ? 'reject' : 'resolve')]();
+                    }
                 })
                 .on('click', '[data-promise]', function () {
-                    resolved = $(this).attr('data-promise') === 'resolve';
+                    var is_resolve_action = ($(this).data('promise') === 'resolve');
+
+                    dialog.data('modalDeferred')[(is_resolve_action ? 'resolve' : 'reject')]();
+
                     dialog.modal('hide');
                 })
                 .modal(options);
-
-                /*
-                 * The modal exists to allow for interactions that will resolve or
-                 * reject the deferred. Internal modification to the deferred's
-                 * state will handle closing it. External modifications should
-                 * result in the same as the interaction will no longer be needed.
-                 */
-                deferred.always(function () {
-                    dialog.modal('hide');
-                });
         });
 
         /*
-         * If the collection only had one element, and the caller used the
-         * `returnDeferred` option to ask for the deferred instead of the
-         * colleciton, then we'll return the deferred. Otherwise return the
-         * collection as any other jQuery plugin would do.
+         * If the caller used the `returnDeferred` option to ask for the
+         * deferred instead of the colleciton, and the collection only had one
+         * element, then we'll return the deferred. Otherwise return the
+         * collection like any other jQuery plugin would do.
          */
-        return (options.returnDeferred && single_deferred) ? single_deferred : collection;
+        return (options.returnDeferred && collection.length === 1) ? collection.data('modalDeferred') : collection;
     };
 }(this));
