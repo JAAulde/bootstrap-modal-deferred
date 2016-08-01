@@ -5,7 +5,7 @@ A wrapper to the standard Bootstrap Modal component that returns a promise that 
 
 ## Simplest Example
 ````javascript
-$('div.modal').modalDeferred()
+$('#confirm_dialog').modalDeferred()
 	.done(function () {
 		alert('Confirmed!');
 	})
