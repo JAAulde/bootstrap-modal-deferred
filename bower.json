@@ -1,0 +1,21 @@
+{
+  "name": "bootstrap-modal-deferred",
+  "authors": [
+    "Jim Auldridge <auldridgej@gmail.com>"
+  ],
+  "description": "A wrapper to the standard Bootstrap Modal component that returns a promise that will be rejected or resolved via interaction with the modal.",
+  "main": "src/deferred.modal.bootstrap.js",
+  "license": "MIT",
+  "homepage": "https://github.com/JAAulde/bootstrap-modal-deferred",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "1.9.1 - 3"
+    "bootstrap": "~3.3.7"
+  }
+}
