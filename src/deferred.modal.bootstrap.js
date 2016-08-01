@@ -5,7 +5,7 @@
  *         we don't have any direct interaction wired with dismissals)
  *     3) allow modal re-use via external calls of bs.modal's show/hide
  */
-(function (context) {
+(function (context, undef) {
     'use strict';
 
     var $ = context.jQuery,
@@ -47,10 +47,15 @@
 
     $.fn.modalDeferred = function (p) {
         var collection = this,
+            method_return,
             options;
 
         if (typeof p === 'string') {
-            collection.modal(p);
+            if (p === 'deferred') {
+                method_return = collection.data(names.DATA_KEY_DEFERRED);
+            } else {
+                collection.modal(p);
+            }
         } else {
             /*
              * Combine the default options with the passed in overrides (if any) to
@@ -96,16 +101,22 @@
         }
 
         /*
-         * If the collection only had one element, and the caller used the
-         * `returnDeferred` option to ask for the deferred instead of the
-         * collection, then we'll return the deferred. Otherwise return the
-         * collection like any other jQuery plugin would do.
+         * If the above code did not dictate a method return value...
          */
-        return (
-            collection.length === 1 &&
-            collection.data(names.DATA_KEY_RETURN_DEFERRED)
-        ) ?
-            collection.data(names.DATA_KEY_DEFERRED) :
-            collection;
+        if (method_return === undef) {
+            /*
+             * If the collection only had one element, and the caller used the
+             * `returnDeferred` option to ask for the deferred instead of the
+             * collection, then we'll return the deferred. Otherwise return the
+             * collection like any other jQuery plugin would do.
+             */
+            if (collection.length === 1 && collection.data(names.DATA_KEY_RETURN_DEFERRED)) {
+                method_return = collection.data(names.DATA_KEY_DEFERRED);
+            } else {
+                method_return = collection;
+            }
+        }
+
+        return method_return;
     };
 }(this));
