@@ -3,7 +3,7 @@ A wrapper to the standard Bootstrap Modal component that returns a promise that 
 
 **Documentation is being written! Until then:**
 
-## Example
+## Simplest Example
 ````javascript
 $('div.modal').modalDeferred()
 	.done(function () {
