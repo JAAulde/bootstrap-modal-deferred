@@ -1,5 +1,5 @@
 # bootstrap-modal-deferred
-A wrapper to the standard [Bootstrap](http://getbootstrap.com) [modal component](http://getbootstrap.com/javascript/#modals) that returns a promise that will be rejected or resolved via interaction with the modal.
+A wrapper to the standard [Bootstrap](http://getbootstrap.com) [modal component](http://getbootstrap.com/javascript/#modals) that returns a promise ([jQuery deferred](https://api.jquery.com/category/deferred-object/)) that will be rejected or resolved via interaction with the modal.
 
 **Documentation is being written! Until then:**
 
