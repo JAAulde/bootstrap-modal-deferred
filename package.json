@@ -2,7 +2,7 @@
   "name": "bootstrap-modal-deferred",
   "version": "1.0.0",
   "description": "A wrapper to the standard Bootstrap Modal component that returns a promise that will be rejected or resolved via interaction with the modal.",
-  "main": "src/deferred.modal.bootstrap.js",
+  "main": "dist/deferred.modal.bootstrap.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

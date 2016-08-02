@@ -4,7 +4,7 @@
     "Jim Auldridge <auldridgej@gmail.com>"
   ],
   "description": "A wrapper to the standard Bootstrap Modal component that returns a promise that will be rejected or resolved via interaction with the modal.",
-  "main": "src/deferred.modal.bootstrap.js",
+  "main": "dist/deferred.modal.bootstrap.js",
   "license": "MIT",
   "homepage": "https://github.com/JAAulde/bootstrap-modal-deferred",
   "ignore": [
