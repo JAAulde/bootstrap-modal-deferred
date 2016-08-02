@@ -1,9 +1,15 @@
-/*
- * Next steps:
- *     1) pass data from interacted element to the resolve
- *     2) pass data from interacted element to the reject (harder because
- *         we don't have any direct interaction wired with dismissals)
- *     3) allow modal re-use via external calls of bs.modal's show/hide
+/* jslint */
+
+/**
+ * @file bootstrap-modal-deferred.js provides a wrapper to the standard
+ *       Bootstrap Modal component that returns a promise that will be rejected
+ *       or resolved via interaction with the modal.
+ * @version %%GULP_INJECT_VERSION%%
+ * @copyright Jim Auldridge <auldridgej@gmail.com> 2016
+ * @license MIT
+ * @see {@link https://github.com/JAAulde/bootstrap-modal-deferred|GitHub Repository}
+ * @see {@link http://getbootstrap.com/javascript/#modals|Bootstrap Modal}
+ * @see {@link https://api.jquery.com/category/deferred-object/|jQuery deferred}
  */
 (function (context, undef) {
     'use strict';
