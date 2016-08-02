@@ -57,10 +57,13 @@
             options;
 
         if (typeof p === 'string') {
-            if (p === 'deferred') {
+            switch (p) {
+            case 'deferred':
                 method_return = collection.data(names.DATA_KEY_DEFERRED);
-            } else {
+                break;
+            default:
                 collection.modal(p);
+                break;
             }
         } else {
             /*
@@ -117,6 +120,7 @@
              * collection like any other jQuery plugin would do.
              */
             if (collection.length === 1 && collection.data(names.DATA_KEY_RETURN_DEFERRED)) {
+
                 method_return = collection.data(names.DATA_KEY_DEFERRED);
             } else {
                 method_return = collection;
