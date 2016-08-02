@@ -16,3 +16,7 @@ $('#confirm_dialog').modalDeferred()
 
 ## Demo
 For now, you can also checkout this [JSFiddle demo](https://jsfiddle.net/JAAulde/4cbL8jqr/).
+
+## Roadmap:
+ 1. Allow `data-promise-*` elements to provide parameters to `resolve` and `reject`
+ 2. Documentation!
