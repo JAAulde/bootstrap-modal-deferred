@@ -18,12 +18,15 @@
         defaults = {
             /*
              * By default, any dismissal of the modal (interaction with a
-             * `data-dismiss="modal"` element) will reject the deferred
+             * `data-dismiss="modal"` element) will reject the deferred. Set
+             * this option to false and any close of the modal will resolve
+             * instead.
              */
             rejectOnDismiss: true,
             /*
-             * If the plugin is called against a single element, then by default
-             * the plugin will return the deferred instead of the collection.
+             * If the plugin is called against a single element, then, by
+             * default, the plugin will return the deferred instead of the
+             * collection.
              */
             returnDeferred: true
         },
