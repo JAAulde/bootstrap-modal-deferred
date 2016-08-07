@@ -20,7 +20,8 @@ Download the code, link it in your HTML file.
 <script src="/path/to/bootstrap-modal-deferred.js"></script>
 ````
 
-## Simplest Example
+## Usage
+### Simplest Example
 ````javascript
 $('#confirm_dialog').modalDeferred()
 	.done(function () {
@@ -31,7 +32,7 @@ $('#confirm_dialog').modalDeferred()
 	});
 ````
 
-## Demo
+### Demo
 For now, you can also checkout this [JSFiddle demo](https://jsfiddle.net/JAAulde/4cbL8jqr/).
 
 ## Roadmap:
