@@ -3,6 +3,23 @@ A wrapper to the standard [Bootstrap](http://getbootstrap.com) [modal component]
 
 **Documentation is being written! Until then:**
 
+## installation
+### [bower](http://bower.io)
+````bash
+bower install bootstrap-modal-deferred
+````
+
+### [npm](https://www.npmjs.com)
+````bash
+npm install bootstrap-modal-deferred
+````
+
+### html
+Download the code, link it in your HTML file.
+````html
+<script src="/path/to/bootstrap-modal-deferred.js"></script>
+````
+
 ## Simplest Example
 ````javascript
 $('#confirm_dialog').modalDeferred()
