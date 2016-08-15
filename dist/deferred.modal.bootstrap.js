@@ -1,9 +1,9 @@
 /* jslint */
 
 /**
- * @file bootstrap-modal-deferred.js provides a wrapper to the standard
- *       Bootstrap Modal component that returns a promise that will be rejected
- *       or resolved via interaction with the modal.
+ * @file provides a wrapper to the standard Bootstrap Modal component that
+ *       returns a promise that will be rejected or resolved via interaction
+ *       with the modal.
  * @version 1.0.0
  * @copyright Jim Auldridge <auldridgej@gmail.com> 2016
  * @license MIT
